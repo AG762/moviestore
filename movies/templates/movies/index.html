@@ -38,6 +38,8 @@
               class="btn bg-dark text-white">
                 {{ movie.name }}
             </a>
+            <a href="{% url 'movies.compare_action' 'add' movie.id %}"
+              class="btn bg-dark text-white">Compare</a>
           </div>
         </div>
       </div>

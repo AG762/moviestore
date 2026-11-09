@@ -63,3 +63,26 @@ def delete_review(request, id, review_id):
         user=request.user)
     review.delete()
     return redirect('movies.show', id=id)
+
+@login_required
+def compare(request, action=None, id=None):
+    ids = request.session.get('compare', [])
+    data = {'title': 'Compare Movies'}
+    if action == 'add' and id not in ids:
+        if len(ids) < 3:
+            ids.append(id)
+        else:
+            data['error'] = 'you cant compare more than 3 movies'
+    if action == 'remove':
+        ids = []
+        for i in ids: 
+            if i != id:
+                ids.append(i)
+    # get list of movie objects with the matching id
+    movies = Movie.objects.filter(id__in=ids)
+    ms = []
+    for m in movies: 
+        ms.append(m.id)
+    request.session['compare'] = ms
+    data['movies'] = movies
+    return render(request, 'movies/compare.html', {'template_data':data})
