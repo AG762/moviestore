@@ -7,24 +7,38 @@
       <div class="col mx-auto mb-3">
         <h2>List of Movies</h2>
         <hr />
-        <p class="card-text">
           <form method="GET">
             <div class="row">
               <div class="col-auto">
-                <div class="input-group col-auto">
-                  <div class="input-group-text">
-                    Search</div>
-                  <input type="text" class="form-control"
-                    name="search">
-                </div>
+                <input type="number" name="min_price" min="0"
+                  class="form-control" placeholder="Min $"
+                  value="{{request.GET.min_price}}">
               </div>
+              <div class="col-auto">
+                <input type="number" name="max_price" min="0"
+                  class="form-control" placeholder="Max $"
+                  value="{{request.GET.max_price}}">
+              </div>
+              <div class="col-auto">
+                  <select name="sort" class="form-select">
+                    <option value="low"> Low to High </option>
+                    <option value="high" {% if request.GET.sort == "high" %} selected {% endif %}> 
+                      High to Low </option>
+                  </select>
+              </div>
+              <div class="col-auto">
+                <div class="input-group">
+                  <div class="input-group-text"> Search</div>
+                    <input type="text" class="form-control"
+                      name="search" value = "{{ request.GET.search}}">
+                </div>
+              </div>  
               <div class="col-auto">
                 <button class="btn bg-dark text-white"
                   type="submit">Search</button>
               </div>
             </div>
           </form>
-        </p>
       </div>
     </div>
     <div class="row">
@@ -41,6 +55,10 @@
           </div>
         </div>
       </div>
+
+      {% empty %}
+        <p> No movies matched your search filters </p>
+        
       {% endfor %}
     </div>
   </div>

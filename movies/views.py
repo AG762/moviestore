@@ -8,6 +8,31 @@ def index(request):
         movies = Movie.objects.filter(name__icontains=search_term)
     else:
         movies = Movie.objects.all()
+    
+    '''
+    movies and sort them just based on some inputs    
+    '''
+    min_price = request.GET.get('min_price', '')
+    max_price = request.GET.get('max_price', '')
+    
+    sort = request.GET.get('sort', 'low')
+    
+    # basic checks
+    if min_price.isdigit():
+        # keeping anything that is greater or equal to min price
+        movies = movies.filter(price__gte=int(min_price))
+    if max_price.isdigit():
+        # keeping anything that is lower or equal to max price
+        movies = movies.filter(price__lte=int(max_price))
+    if sort == 'high':
+        # hey, reverse this
+        movies = movies.order_by('-price', 'id')
+    else:
+        # normal one
+        movies = movies.order_by('price', 'id')
+    
+        
+    
     template_data = {}
     template_data['title'] = 'Movies'
     template_data['movies'] = movies
