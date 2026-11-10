@@ -30,6 +30,24 @@
             </div>
           </form>
         </p>
+        <p class="card-text">
+          <form method="post"
+            action="{% url 'wishlist.toggle' id=template_data.movie.id %}">
+            <div class="row">
+              {% csrf_token %}
+              <div class="col-auto">
+                {% if template_data.movie.id in request.session.wishlist %}
+                <button class="btn bg-primary text-white"
+                  type="submit">Remove from wishlist</button>
+              {% else%}
+                <button class="btn bg-primary text-white"
+                  type="submit">Add to wishlist</button>
+                  {%endif%}
+              </div>
+              
+            </div>
+          </form>
+        </p>
         <h2>Reviews</h2>
         <hr />
         <ul class="list-group">
