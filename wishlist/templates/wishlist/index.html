@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load cart_filters %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col mx-auto mb-3">
+        <h2>Wishlist</h2>
+        <hr />
+      </div>
+    </div>
+    <div class="row m-1">
+      <table class="table table-bordered table-striped
+        text-center">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for movie in template_data.movies_in_wishlist %}
+          <tr>
+            <td>{{ movie.id }}</td>
+            <td>{{ movie.name }}</td>
+            <td>${{ movie.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if template_data.movies_in_wishlist|length > 0 %}
+        <a href="{% url 'wishlist.clear' %}">
+          <button class="btn btn-danger mb-2">
+            Remove all movies from Wishlist
+          </button>
+        </a>
+        {% endif %}
+  </div>
+</div>
+{% endblock content %}
