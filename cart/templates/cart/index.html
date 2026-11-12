@@ -27,7 +27,28 @@
             <td>{{ movie.id }}</td>
             <td>{{ movie.name }}</td>
             <td>${{ movie.price }}</td>
-            <td>{{request.session.cart|get_quantity:movie.id }}
+            <td>
+              <form method="POST" action="{% url 'cart.update' id=movie.id %}">
+                {% csrf_token %}
+                <input
+                  type="number"
+                  name="quantity"
+                  min="1"
+                  max="10"
+                  value="{{request.session.cart|get_quantity:movie.id}}"
+                  class="form-control"
+                  aria-label="Quantity for the movie"
+                >
+                <button type="submit" class="btn btn-primary">
+                  Update quantity
+                </button>
+              </form>
+              <form method="POST" action="{% url 'cart.remove' id=movie.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                  Remove movie from cart
+                </button>
+              </form>
             </td>
           </tr>
           {% endfor %}

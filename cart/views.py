@@ -1,3 +1,4 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 
 # Create your views here.
@@ -55,3 +56,27 @@ def purchase(request):
     template_data['order_id'] = order.id
     return render(request, 'cart/purchase.html',
         {'template_data': template_data})
+@login_required
+def update_quantity(request, id):
+    get_object_or_404(Movie, id=id)
+    cart = request.session.get('cart', {})
+    movie_id = str(id)
+    if movie_id not in cart:
+        return redirect('cart.index')
+    quantity = int(request.POST.get('quantity', ''))
+    if not quantity >= 1 and quantity <= 10:
+        return HttpResponseBadRequest('Invalid number of movies')
+    cart[movie_id] = quantity
+    request.session['cart'] = cart
+    return redirect('cart.index')
+@login_required
+def remove_quantity(request, id):
+    get_object_or_404(Movie, id=id)
+    cart = request.session.get('cart', {})
+    movie_id = str(id)
+    if movie_id not in cart:
+        return redirect('cart.index')
+    cart.pop(movie_id)
+    request.session['cart'] = cart
+    return redirect('cart.index')
+

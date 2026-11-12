@@ -64,7 +64,7 @@
             {% if user.is_authenticated and user != review.user %}
               <form method="post" action="{% url 'movies.toggle_helpful' template_data.movie.id review.id %}">
                 {% csrf_token %}
-                <button type=""submit" class=""btn btn-outline-success">
+                <button type="submit" class="btn btn-outline-success">
                   {% if user in review.helpful_users.all %}
                     Remove Helpful
                   {% else %}
