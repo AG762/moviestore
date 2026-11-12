@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 def index(request):
     search_term = request.GET.get('search')
@@ -111,3 +112,14 @@ def compare(request, action=None, id=None):
     request.session['compare'] = ms
     data['movies'] = movies
     return render(request, 'movies/compare.html', {'template_data':data})
+@login_required
+@require_POST
+def toggle_helpful(request, id, review_id):
+    review = get_object_or_404(Review, id=review_id, movie_id=id)
+    if review.user_id == request.user.id:
+        return redirect("movies.show", id=id)
+    if review.helpful_users.filter(id=request.user.id).exists():
+        review.helpful_users.remove(request.user)
+    else:
+        review.helpful_users.add(request.user)
+    return redirect("movies.show", id=id)

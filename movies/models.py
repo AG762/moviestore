@@ -18,5 +18,6 @@ class Review(models.Model):
         on_delete=models.CASCADE)
     user = models.ForeignKey(User,
         on_delete=models.CASCADE)
+    helpful_users = models.ManyToManyField(User, blank=True, related_name='helpful_reviews')
     def __str__(self):
         return str(self.id) + ' - ' + self.movie.name
